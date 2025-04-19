@@ -14,13 +14,11 @@ class Pipeline:
         self.env_config = dotenv_values(self.ENV_PATH)
 
     def __extract(self) -> List[str]:
-        file_paths = list()
-        for env_key in SourceEnvKeys:
-            data_path = self.env_config[env_key.value]
-            for file_name in os.listdir(data_path):
-                file_path = os.path.join(data_path, file_name)
-                file_paths.append(file_path)
-        return file_paths
+        return [
+            os.path.join(self.env_config[env_key.value], file_name)
+            for env_key in SourceEnvKeys
+            for file_name in os.listdir(self.env_config[env_key.value])
+        ]
 
     def __transform(self, file_paths: List[str]) -> Dict:
         prefixes = ("plane", "military")
