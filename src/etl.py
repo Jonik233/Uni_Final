@@ -59,6 +59,10 @@ class Pipeline:
             print(f"Copied: {file_path} -> {target_path}")
 
     def run(self) -> None:
+        """
+        Runs the full pipeline: extract -> transform -> load
+        :return: None
+        """
         file_paths = self.extract()
         labels_dict = self.transform(file_paths)
         self.load(file_paths, labels_dict)
