@@ -25,7 +25,10 @@ class Pipeline:
     def __transform(self, file_paths: List[str]) -> Dict:
         prefixes = ("plane", "military")
         file_names = [os.path.basename(file_path) for file_path in file_paths]
-        labels = [1 if any(prefix in file_name for prefix in prefixes) else 0 for file_name in file_names]
+        labels = [
+            1 if any(prefix in file_name for prefix in prefixes) else 0
+            for file_name in file_names
+        ]
         return {"FileNames": file_names, "Labels": labels}
 
     def __load(self, file_paths: List[str], labels_dict: Dict) -> None:
