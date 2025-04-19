@@ -1,0 +1,12 @@
+from enum import Enum
+
+
+class SourceEnvKeys(Enum):
+    CIVILIAN_PLANES_DIR = "CIVILIAN_PLANES_DIR"
+    EMPTY_PLANE_DIR = "EMPTY_PLANE_DIR"
+    MILITARY_PLANES_DIR = "MILITARY_PLANES_DIR"
+
+
+class TargetEnvKeys(Enum):
+    DATA_TARGET_DIR = "DATA_TARGET_DIR"
+    LABEL_TARGET_DIR = "LABEL_TARGET_DIR"
