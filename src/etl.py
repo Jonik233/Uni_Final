@@ -7,20 +7,32 @@ from env_enum import SourceEnvKeys, TargetEnvKeys
 
 
 class Pipeline:
+    """
+    A simple ETL pipeline that extracts files from source directories,
+    transforms their names into labels, and saves both files and labels
+    to target locations defined in a .env file.
+    """
 
-    ENV_PATH = ".env"
+    def __init__(self, env_path: str = ".env"):
+        self.env_config = dotenv_values(env_path)
 
-    def __init__(self):
-        self.env_config = dotenv_values(self.ENV_PATH)
-
-    def __extract(self) -> List[str]:
+    def extract(self) -> List[str]:
+        """
+        Extracts file paths from source directories defined in .env file
+        :return: list of file paths
+        """
         return [
             os.path.join(self.env_config[env_key.value], file_name)
             for env_key in SourceEnvKeys
             for file_name in os.listdir(self.env_config[env_key.value])
         ]
 
-    def __transform(self, file_paths: List[str]) -> Dict:
+    def transform(self, file_paths: List[str]) -> Dict:
+        """
+        Transforms file prefixes into labels and stores file names and corresponding labels into a dictionary
+        :param file_paths: extracted file paths from source directories defined in .env file
+        :return: dictionary of file names and corresponding labels
+        """
         prefixes = ("plane", "military")
         file_names = [os.path.basename(file_path) for file_path in file_paths]
         labels = [
@@ -29,7 +41,13 @@ class Pipeline:
         ]
         return {"FileNames": file_names, "Labels": labels}
 
-    def __load(self, file_paths: List[str], labels_dict: Dict) -> None:
+    def load(self, file_paths: List[str], labels_dict: Dict) -> None:
+        """
+        Copies files to the target directory and saves labels to CSV.
+        :param file_paths: list of file paths from source directories defined in .env file
+        :param labels_dict: dictionary of file names and their corresponding labels {"FileNames": list(), "Labels": list()}
+        :return: None
+        """
         target_labels_path = self.env_config[TargetEnvKeys.LABEL_TARGET_DIR.value]
         target_data_path = self.env_config[TargetEnvKeys.DATA_TARGET_DIR.value]
 
@@ -41,9 +59,9 @@ class Pipeline:
             print(f"Copied: {file_path} -> {target_path}")
 
     def run(self) -> None:
-        file_paths = self.__extract()
-        labels_dict = self.__transform(file_paths)
-        self.__load(file_paths, labels_dict)
+        file_paths = self.extract()
+        labels_dict = self.transform(file_paths)
+        self.load(file_paths, labels_dict)
 
 
 if __name__ == "__main__":
