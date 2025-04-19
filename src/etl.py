@@ -30,18 +30,13 @@ class Pipeline:
         return {"FileNames": file_names, "Labels": labels}
 
     def __load(self, file_paths: List[str], labels_dict: Dict) -> None:
-        label_key = TargetEnvKeys.LABEL_TARGET_DIR.value
-        target_labels_path = self.env_config[label_key]
+        target_labels_path = self.env_config[TargetEnvKeys.LABEL_TARGET_DIR.value]
+        target_data_path = self.env_config[TargetEnvKeys.DATA_TARGET_DIR.value]
 
-        data_key = TargetEnvKeys.DATA_TARGET_DIR.value
-        target_data_path = self.env_config[data_key]
-
-        df_labels = pd.DataFrame(labels_dict)
-        df_labels.to_csv(target_labels_path, index=False)
+        pd.DataFrame(labels_dict).to_csv(target_labels_path, index=False)
 
         for file_path in file_paths:
-            filename = os.path.basename(file_path)
-            target_path = os.path.join(target_data_path, filename)
+            target_path = os.path.join(target_data_path, os.path.basename(file_path))
             shutil.copy2(file_path, target_path)
             print(f"Copied: {file_path} -> {target_path}")
 
