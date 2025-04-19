@@ -23,14 +23,10 @@ class Pipeline:
         return file_paths
 
     def __transform(self, file_paths: List[str]) -> Dict:
-        labels_dict = {"Paths": list(), "Labels": list()}
-        for file_path in file_paths:
-            file_name = file_path.split("\\")[-1]
-            prefix = file_name.split("_")[0]
-            label = 1 if prefix in ["plane", "military"] else 0
-            labels_dict["Paths"].append(file_name)
-            labels_dict["Labels"].append(label)
-        return labels_dict
+        prefixes = ("plane", "military")
+        file_names = [os.path.basename(file_path) for file_path in file_paths]
+        labels = [1 if any(prefix in file_name for prefix in prefixes) else 0 for file_name in file_names]
+        return {"FileNames": file_names, "Labels": labels}
 
     def __load(self, file_paths: List[str], labels_dict: Dict) -> None:
         label_key = TargetEnvKeys.LABEL_TARGET_DIR.value
