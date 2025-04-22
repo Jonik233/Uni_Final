@@ -48,15 +48,21 @@ class Pipeline:
         :param labels_dict: dictionary of file names and their corresponding labels {"FileNames": list(), "Labels": list()}
         :return: None
         """
-        target_labels_path = self.env_config[TargetEnvKeys.LABEL_TARGET_DIR.value]
         target_data_path = self.env_config[TargetEnvKeys.DATA_TARGET_DIR.value]
+        target_labels_path = self.env_config[TargetEnvKeys.LABEL_TARGET_DIR.value]
+
+        os.makedirs(target_data_path, exist_ok=True)
+        os.makedirs(os.path.dirname(target_labels_path), exist_ok=True)
 
         pd.DataFrame(labels_dict).to_csv(target_labels_path, index=False)
 
         for file_path in file_paths:
             target_path = os.path.join(target_data_path, os.path.basename(file_path))
-            shutil.copy2(file_path, target_path)
-            print(f"Copied: {file_path} -> {target_path}")
+            try:
+                shutil.copy2(file_path, target_path)
+                print(f"Copied: {file_path} -> {target_path}")
+            except (IOError, OSError) as e:
+                print(f"Failed to copy {file_path} to {target_path}: {e}")
 
     def run(self) -> None:
         """
