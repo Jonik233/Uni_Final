@@ -10,3 +10,7 @@ class SourceEnvKeys(Enum):
 class TargetEnvKeys(Enum):
     DATA_TARGET_DIR = "DATA_TARGET_DIR"
     LABEL_TARGET_DIR = "LABEL_TARGET_DIR"
+
+
+class ModelEnvKeys(Enum):
+    RESNET34_WEIGHTS_PATH = "RESNET34_WEIGHTS_PATH"
