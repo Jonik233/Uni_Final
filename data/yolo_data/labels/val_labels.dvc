@@ -1,0 +1,6 @@
+outs:
+- md5: d61c6c510ffe39fcee474339c73e243a.dir
+  size: 205190
+  nfiles: 420
+  hash: md5
+  path: val_labels

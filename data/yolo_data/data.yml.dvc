@@ -1,0 +1,5 @@
+outs:
+- md5: 7a507326cb90fdd2ba5e25ed5a3ccf1c
+  size: 151
+  hash: md5
+  path: data.yml
