@@ -3,4 +3,4 @@ outs:
   size: 205190
   nfiles: 420
   hash: md5
-  path: val_labels
+  path: val_data
