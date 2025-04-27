@@ -48,8 +48,8 @@ class Pipeline:
         :param labels_dict: dictionary of file names and corresponding labels {"FileNames": list(), "Labels": list()}
         :return: None
         """
-        target_data_path = self.env_config[TargetEnvKeys.DATA_TARGET_DIR.value]
-        target_labels_path = self.env_config[TargetEnvKeys.LABEL_TARGET_DIR.value]
+        target_data_path = self.env_config[TargetEnvKeys.RESNET34_DATA_TARGET_DIR.value]
+        target_labels_path = self.env_config[TargetEnvKeys.RESNET34_LABEL_TARGET_DIR.value]
 
         os.makedirs(target_data_path, exist_ok=True)
         os.makedirs(os.path.dirname(target_labels_path), exist_ok=True)
