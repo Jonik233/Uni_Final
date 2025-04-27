@@ -3,7 +3,7 @@ import shutil
 import pandas as pd
 from typing import List, Dict
 from dotenv import dotenv_values
-from env_enum import SourceEnvKeys, TargetEnvKeys
+from env_enum import ResnetSourceEnvKeys, TargetEnvKeys
 
 
 class Pipeline:
@@ -23,7 +23,7 @@ class Pipeline:
         """
         return [
             os.path.join(self.env_config[env_key.value], file_name)
-            for env_key in SourceEnvKeys
+            for env_key in ResnetSourceEnvKeys
             for file_name in os.listdir(self.env_config[env_key.value])
         ]
 
@@ -45,7 +45,7 @@ class Pipeline:
         """
         Copies files to the target directory and saves labels to CSV.
         :param file_paths: list of file paths from source directories defined in .env file
-        :param labels_dict: dictionary of file names and their corresponding labels {"FileNames": list(), "Labels": list()}
+        :param labels_dict: dictionary of file names and corresponding labels {"FileNames": list(), "Labels": list()}
         :return: None
         """
         target_data_path = self.env_config[TargetEnvKeys.DATA_TARGET_DIR.value]
