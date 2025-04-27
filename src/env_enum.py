@@ -15,3 +15,4 @@ class TargetEnvKeys(Enum):
 
 class ModelEnvKeys(Enum):
     RESNET34_WEIGHTS_PATH = "RESNET34_WEIGHTS_PATH"
+    YOLO_WEIGHTS_PATH = "YOLO_WEIGHTS_PATH"
