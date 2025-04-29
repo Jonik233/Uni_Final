@@ -1,0 +1,5 @@
+outs:
+- md5: 0a1d5d0619d5a24848a267ec1e3a3118
+  size: 22588772
+  hash: md5
+  path: pretrained_yolov8s.pt
