@@ -1,5 +1,5 @@
 outs:
-- md5: 89040d00f40927d3266482ba7c9466bf
+- md5: ecd6cec752596e1104b1133269fa066e
   size: 85284876
   hash: md5
   path: resnet34_weights.pth
