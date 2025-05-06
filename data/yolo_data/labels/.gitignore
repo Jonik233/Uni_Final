@@ -1,2 +1,4 @@
 /train_data
 /val_data
+train_data.cache
+val_data.cache
