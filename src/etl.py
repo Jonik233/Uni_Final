@@ -13,7 +13,7 @@ class Pipeline:
     to target locations defined in a .env file.
     """
 
-    def __init__(self, env_path: str = ".env"):
+    def __init__(self, env_path: str = "../.env"):
         self.env_config = dotenv_values(env_path)
 
     def extract(self) -> List[str]:
