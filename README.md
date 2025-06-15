@@ -127,7 +127,7 @@ YOLO_WEIGHTS_PATH=path/to/yolo_weights.pt
 Система запускається через консоль. Для виконання інференсу над одним або декількома зображеннями:
 
 ```bash
-python main.py path/to/image1.jpg path/to/image2.jpg ...
+python src/inference.py path/to/image1.jpg path/to/image2.jpg ...
 ```
 
 Після запуску:
