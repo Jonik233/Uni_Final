@@ -1,138 +1,67 @@
-# Підсистема інтелектуального аналізу образів і розпізнавання об'єктів на земній поверхні
+# Object Detection and Classification
 
-## 1. Тема
+## 1. Project Overview
 
-Метою дипломної роботи є розробка підсистеми для інтелектуального аналізу супутникових та аерофотознімків з аеродромів. Система виконує дві основні задачі:
+The system performs two main tasks:
 
-1. Класифікація зображень на наявність або відсутність літаків на аеродромі.
-2. Локалізація виявлених літаків та їх розподіл на **військові** та **цивільні**.
+1. **Frame classification** based on the presence or absence of airplanes.
+2. **Aircraft localization** and its classification into civilian or military categories.
 
-Для першого етапу використовувався згортковий класифікатор **ResNet34**, а для другого — детектор **YOLOv8s** з бібліотеки Ultraytics. Обидві мережі були донавчені (fine-tuned) із використанням фреймворку **PyTorch**.
-
----
-
-## 2. Опис даних
-
-Для навчання та тестування моделі використовувався набір зображень аеродромів різних типів (громадські, військові) з анотованими мітками:
-
-* **Клас**: наявність / відсутність літака на кадрі
-* **Об'єкти**: локалізація літаків та їх розподіл на військові/цивільні
-
-![Приклади зображень даних](metrics/data_samples.png)
+For the first step, the **ResNet34** CNN was used; for the second, the **YOLOv8s** detector from Ultralytics. Both models were fine-tuned using **PyTorch**.
 
 ---
 
-## 3. Класифікація зображень: ResNet34
+## 2. Data Description
 
-### Архітектура
+A dataset consisting of images of various airfield types (civilian and military) with annotated labels was used for training and testing the models:
 
-ResNet34 — глибока згорткова мережа з 34 шарами, що використовує залишкові зв’язки для запобігання проблемі зникнення градієнта. Для нашої задачі:
+* **Class**: Presence / absence of an aircraft in the frame.
+* **Objects**: Localization of aircraft and their classification into military or civilian types.
 
-* Початковий шар обробки зображень розміром 224×224
-* Чотири блоки залишкових модулів
-* Фінальний fully-connected шар з 2 нейронами (класи:
-
-  * "Літак присутній"
-  * "Літак відсутній")
-
-Мережу було донавчено на власному наборі даних з початкової вагової ініціалізацією ImageNet.
-
-### Метрики якості
-
-![Метрики ResNet34](metrics/resnet_metrics.png)
+![Data Samples](metrics/data_samples.png)
 
 ---
 
-## 4. Локалізація і класифікація: YOLOv8s
+## 3. Image Classification: ResNet34
 
-### Архітектура
+### Architecture
 
-YOLOv8s — сучасний варіант детекторів "You Only Look Once" з високою швидкістю та точністю:
+ResNet34 is a deep convolutional neural network with 34 layers that utilizes residual connections to prevent the vanishing gradient problem. For our specific task, it features:
 
-* Backbone: CSPDarknet
-* Neck: PANet для масштабного об’єднання ознак
-* Head: прогноз координат рамок та класів об’єктів (військовий/цивільний)
+* An initial image processing layer with a resolution of 224x224.
+* Four blocks of residual modules.
+* A final fully-connected layer with 2 neurons (classes:
+  * "Aircraft present"
+  * "Aircraft absent")
 
-Мережу було донавчено із початковими вагами ultralytics на власному наборі анотованих знімків.
+The network was fine-tuned on a custom dataset starting with pre-trained ImageNet weights.
 
-### Метрики якості
+### Performance Metrics
 
-![Метрики YOLOv8](metrics/yolo_metrics.png)
-
----
-
-## 5. Результати тестування
-
-В цьому розділі подано приклади результатів детекції та класифікації літаків на тестових зображеннях.
-
-![Результати тестування](metrics/test_results.png)
-
-## 6. Встановлення та запуск
-
-### Вимоги до середовища
-
-Для коректної роботи підсистеми необхідно мати встановлені наступні компоненти:
-
-- **Операційна система**: Windows 10 / Ubuntu 20.04 або новіше  
-- **Python**: версія 3.9 або новіше  
-- **CUDA** (опційно): версія 11.8 для використання GPU  
-- **Бібліотеки Python**:
-  - `torch`
-  - `torchvision`
-  - `ultralytics`
-  - `numpy`
-  - `matplotlib`
-  - `Pillow`
-  - `python-dotenv`
-
-> ⚠️ Усі бібліотеки можна встановити за допомогою файлу залежностей:
-
-```bash
-pip install -r requirements.txt
-```
-
-Або вручну:
-
-```bash
-pip install torch torchvision ultralytics numpy matplotlib pillow python-dotenv
-```
+![ResNet34 Metrics](metrics/resnet_metrics.png)
 
 ---
 
-### Підготовка середовища
+## 4. Localization and Classification: YOLOv8s
 
-1. **Клонування репозиторію**:
+### Architecture
 
-```bash
-git clone <repo_url>
-cd <repo_folder>
-```
+YOLOv8s is a modern variant of the "You Only Look Once" detector family, offering high speed and accuracy:
 
-2. **Створення файлу `.env`** у корені проєкту з наступним вмістом:
+* **Backbone**: CSPDarknet
+* **Neck**: PANet for multi-scale feature aggregation
+* **Head**: Predicts bounding box coordinates and object classes (military/civilian)
 
-```
-RESNET34_WEIGHTS_PATH=path/to/resnet_weights.pth
-YOLO_WEIGHTS_PATH=path/to/yolo_weights.pt
-```
+The network was fine-tuned using pre-trained Ultralytics weights on a custom dataset of annotated airfield images.
 
-3. **Підготовка вагових файлів**:
-   - Завантажити донавчену модель **ResNet34** у форматі `.pth`
-   - Завантажити модель **YOLOv8s** у форматі `.pt` (з Ultralytics або власна)
-   - Вказати відповідні шляхи до цих файлів у `.env`
+### Performance Metrics
+
+![YOLOv8 Metrics](metrics/yolo_metrics.png)
 
 ---
 
-### Запуск інференсу
+## 5. Test Results
 
-Система запускається через консоль. Для виконання інференсу над одним або декількома зображеннями:
+This section presents visual examples of aircraft detection and classification results obtained on the test image set.
 
-```bash
-python src/inference.py path/to/image1.jpg path/to/image2.jpg ...
-```
-
-Після запуску:
-
-- Виконується класифікація кожного зображення на наявність літака за допомогою **ResNet34**
-- Для зображень, де виявлено літак, виконується локалізація та класифікація (військовий/цивільний) за допомогою **YOLOv8s**
-- Кожне оброблене зображення з накладеними рамками зберігається як `pred_0.png`, `pred_1.png`, ...
-- Виводиться підсумкова сітка зображень за допомогою `matplotlib`
+![Test Results](metrics/test_results.png)
